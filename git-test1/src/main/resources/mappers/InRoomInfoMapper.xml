@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cz.dao.InRoomInfoMapper" >
+  <resultMap id="BaseResultMap" type="cz.domain.InRoomInfo" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="customer_name" property="customerName" jdbcType="VARCHAR" />
+    <result column="gender" property="gender" jdbcType="VARCHAR" />
+    <result column="is_vip" property="isVip" jdbcType="VARCHAR" />
+    <result column="idcard" property="idcard" jdbcType="VARCHAR" />
+    <result column="phone" property="phone" jdbcType="VARCHAR" />
+    <result column="money" property="money" jdbcType="REAL" />
+    <result column="create_date" property="createDate" jdbcType="TIMESTAMP" />
+    <result column="room_id" property="roomId" jdbcType="INTEGER" />
+    <result column="status" property="status" jdbcType="VARCHAR" />
+    <result column="out_room_status" property="outRoomStatus" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, customer_name, gender, is_vip, idcard, phone, money, create_date, room_id, status, 
+    out_room_status
+  </sql>
+
+  <sql id="Base_Column_Limit">
+    <if test="id != null and id != ''" >
+      id = #{id,jdbcType=INTEGER}
+    </if>
+    <if test="ids != null and ids != ''" >
+      <include refid="Batch_Ids"/>
+    </if>
+    <if test="customerName != null and customerName != ''" >
+      customer_name  like concat("%",#{customerName},"%")
+    </if>
+    <if test="gender != null and gender != ''" >
+      gender = #{gender,jdbcType=VARCHAR}
+    </if>
+    <if test="isVip != null and isVip != ''" >
+      is_vip = #{isVip,jdbcType=VARCHAR}
+    </if>
+    <if test="idcard != null and idcard != ''" >
+      idcard = #{idcard,jdbcType=VARCHAR}
+    </if>
+    <if test="phone != null and phone != ''" >
+      phone = #{phone,jdbcType=VARCHAR}
+    </if>
+    <if test="money != null and money != ''" >
+      money = #{money,jdbcType=REAL}
+    </if>
+    <if test="createDate != null and createDate != ''" >
+      create_date = #{createDate,jdbcType=TIMESTAMP}
+    </if>
+    <if test="roomId != null and roomId != ''" >
+      room_id = #{roomId,jdbcType=INTEGER}
+    </if>
+    <if test="status != null and status != ''" >
+      status = #{status,jdbcType=VARCHAR}
+    </if>
+    <if test="outRoomStatus != null and outRoomStatus != ''" >
+      out_room_status = #{outRoomStatus,jdbcType=VARCHAR}
+    </if>
+  </sql>
+
+  <sql id="Batch_Ids">
+    id in
+    <foreach collection="ids" item="item"  open="(" separator="," close=")">#{item}</foreach>
+  </sql>
+
+  <insert id="insertOptional" parameterType="cz.domain.InRoomInfo" >
+    insert into in_room_info
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null and id != ''" >
+        id,
+      </if>
+      <if test="customerName != null and customerName != ''" >
+        customer_name,
+      </if>
+      <if test="gender != null and gender != ''" >
+        gender,
+      </if>
+      <if test="isVip != null and isVip != ''" >
+        is_vip,
+      </if>
+      <if test="idcard != null and idcard != ''" >
+        idcard,
+      </if>
+      <if test="phone != null and phone != ''" >
+        phone,
+      </if>
+      <if test="money != null and money != ''" >
+        money,
+      </if>
+      <if test="createDate != null and createDate != ''" >
+        create_date,
+      </if>
+      <if test="roomId != null and roomId != ''" >
+        room_id,
+      </if>
+      <if test="status != null and status != ''" >
+        status,
+      </if>
+      <if test="outRoomStatus != null and outRoomStatus != ''" >
+        out_room_status,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null and id != ''" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="customerName != null and customerName != ''" >
+        #{customerName,jdbcType=VARCHAR},
+      </if>
+      <if test="gender != null and gender != ''" >
+        #{gender,jdbcType=VARCHAR},
+      </if>
+      <if test="isVip != null and isVip != ''" >
+        #{isVip,jdbcType=VARCHAR},
+      </if>
+      <if test="idcard != null and idcard != ''" >
+        #{idcard,jdbcType=VARCHAR},
+      </if>
+      <if test="phone != null and phone != ''" >
+        #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="money != null and money != ''" >
+        #{money,jdbcType=REAL},
+      </if>
+      <if test="createDate != null and createDate != ''" >
+        #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="roomId != null and roomId != ''" >
+        #{roomId,jdbcType=INTEGER},
+      </if>
+      <if test="status != null and status != ''" >
+        #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="outRoomStatus != null and outRoomStatus != ''" >
+        #{outRoomStatus,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+
+  <delete id="deleteOptional" parameterType="java.lang.Integer" >
+    delete from in_room_info
+    <where>
+      <include refid="Base_Column_Limit" />
+    </where>
+  </delete>
+
+  <update id="updateByPrimaryKeySelective" parameterType="cz.domain.InRoomInfo" >
+    update in_room_info
+    <set >
+      <if test="customerName != null and customerName != ''" >
+        customer_name = #{customerName,jdbcType=VARCHAR},
+      </if>
+      <if test="gender != null and gender != ''" >
+        gender = #{gender,jdbcType=VARCHAR},
+      </if>
+      <if test="isVip != null and isVip != ''" >
+        is_vip = #{isVip,jdbcType=VARCHAR},
+      </if>
+      <if test="idcard != null and idcard != ''" >
+        idcard = #{idcard,jdbcType=VARCHAR},
+      </if>
+      <if test="phone != null and phone != ''" >
+        phone = #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="money != null and money != ''" >
+        money = #{money,jdbcType=REAL},
+      </if>
+      <if test="createDate != null and createDate != ''" >
+        create_date = #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="roomId != null and roomId != ''" >
+        room_id = #{roomId,jdbcType=INTEGER},
+      </if>
+      <if test="status != null and status != ''" >
+        status = #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="outRoomStatus != null and outRoomStatus != ''" >
+        out_room_status = #{outRoomStatus,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <where>
+      <include refid="Base_Column_Limit" />
+    </where>
+  </update>
+
+  <select id="selectOptional" resultMap="selectMap" parameterType="java.lang.Integer" >
+    select
+    <include refid="Base_Column_List" />
+    from in_room_info
+    <where>
+      <include refid="Base_Column_Limit" />
+    </where>
+  </select>
+
+  <resultMap id="selectMap" type="InRoomInfo">
+    <association property="rooms" javaType="Rooms" column="room_id"
+                 select="cz.dao.RoomsMapper.selectOptional"></association>
+  </resultMap>
+
+</mapper>

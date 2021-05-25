@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cz.dao.RoomSaleMapper" >
+  <resultMap id="BaseResultMap" type="cz.domain.RoomSale" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="room_num" property="roomNum" jdbcType="VARCHAR" />
+    <result column="customer_name" property="customerName" jdbcType="VARCHAR" />
+    <result column="start_date" property="startDate" jdbcType="TIMESTAMP" />
+    <result column="end_date" property="endDate" jdbcType="TIMESTAMP" />
+    <result column="days" property="days" jdbcType="INTEGER" />
+    <result column="room_price" property="roomPrice" jdbcType="DOUBLE" />
+    <result column="rent_price" property="rentPrice" jdbcType="DOUBLE" />
+    <result column="other_price" property="otherPrice" jdbcType="DOUBLE" />
+    <result column="sale_price" property="salePrice" jdbcType="DOUBLE" />
+    <result column="discount_price" property="discountPrice" jdbcType="DOUBLE" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, room_num, customer_name, start_date, end_date, days, room_price, rent_price, 
+    other_price, sale_price, discount_price
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from roomsale
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from roomsale
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="cz.domain.RoomSale" >
+    insert into roomsale (id, room_num, customer_name, 
+      start_date, end_date, days, 
+      room_price, rent_price, other_price, 
+      sale_price, discount_price)
+    values (#{id,jdbcType=INTEGER}, #{roomNum,jdbcType=VARCHAR}, #{customerName,jdbcType=VARCHAR}, 
+      #{startDate,jdbcType=TIMESTAMP}, #{endDate,jdbcType=TIMESTAMP}, #{days,jdbcType=INTEGER}, 
+      #{roomPrice,jdbcType=DOUBLE}, #{rentPrice,jdbcType=DOUBLE}, #{otherPrice,jdbcType=DOUBLE}, 
+      #{salePrice,jdbcType=DOUBLE}, #{discountPrice,jdbcType=DOUBLE})
+  </insert>
+  <insert id="insertSelective" parameterType="cz.domain.RoomSale" >
+    insert into roomsale
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="roomNum != null" >
+        room_num,
+      </if>
+      <if test="customerName != null" >
+        customer_name,
+      </if>
+      <if test="startDate != null" >
+        start_date,
+      </if>
+      <if test="endDate != null" >
+        end_date,
+      </if>
+      <if test="days != null" >
+        days,
+      </if>
+      <if test="roomPrice != null" >
+        room_price,
+      </if>
+      <if test="rentPrice != null" >
+        rent_price,
+      </if>
+      <if test="otherPrice != null" >
+        other_price,
+      </if>
+      <if test="salePrice != null" >
+        sale_price,
+      </if>
+      <if test="discountPrice != null" >
+        discount_price,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="roomNum != null" >
+        #{roomNum,jdbcType=VARCHAR},
+      </if>
+      <if test="customerName != null" >
+        #{customerName,jdbcType=VARCHAR},
+      </if>
+      <if test="startDate != null" >
+        #{startDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="endDate != null" >
+        #{endDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="days != null" >
+        #{days,jdbcType=INTEGER},
+      </if>
+      <if test="roomPrice != null" >
+        #{roomPrice,jdbcType=DOUBLE},
+      </if>
+      <if test="rentPrice != null" >
+        #{rentPrice,jdbcType=DOUBLE},
+      </if>
+      <if test="otherPrice != null" >
+        #{otherPrice,jdbcType=DOUBLE},
+      </if>
+      <if test="salePrice != null" >
+        #{salePrice,jdbcType=DOUBLE},
+      </if>
+      <if test="discountPrice != null" >
+        #{discountPrice,jdbcType=DOUBLE},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="cz.domain.RoomSale" >
+    update roomsale
+    <set >
+      <if test="roomNum != null" >
+        room_num = #{roomNum,jdbcType=VARCHAR},
+      </if>
+      <if test="customerName != null" >
+        customer_name = #{customerName,jdbcType=VARCHAR},
+      </if>
+      <if test="startDate != null" >
+        start_date = #{startDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="endDate != null" >
+        end_date = #{endDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="days != null" >
+        days = #{days,jdbcType=INTEGER},
+      </if>
+      <if test="roomPrice != null" >
+        room_price = #{roomPrice,jdbcType=DOUBLE},
+      </if>
+      <if test="rentPrice != null" >
+        rent_price = #{rentPrice,jdbcType=DOUBLE},
+      </if>
+      <if test="otherPrice != null" >
+        other_price = #{otherPrice,jdbcType=DOUBLE},
+      </if>
+      <if test="salePrice != null" >
+        sale_price = #{salePrice,jdbcType=DOUBLE},
+      </if>
+      <if test="discountPrice != null" >
+        discount_price = #{discountPrice,jdbcType=DOUBLE},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="cz.domain.RoomSale" >
+    update roomsale
+    set room_num = #{roomNum,jdbcType=VARCHAR},
+      customer_name = #{customerName,jdbcType=VARCHAR},
+      start_date = #{startDate,jdbcType=TIMESTAMP},
+      end_date = #{endDate,jdbcType=TIMESTAMP},
+      days = #{days,jdbcType=INTEGER},
+      room_price = #{roomPrice,jdbcType=DOUBLE},
+      rent_price = #{rentPrice,jdbcType=DOUBLE},
+      other_price = #{otherPrice,jdbcType=DOUBLE},
+      sale_price = #{salePrice,jdbcType=DOUBLE},
+      discount_price = #{discountPrice,jdbcType=DOUBLE}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

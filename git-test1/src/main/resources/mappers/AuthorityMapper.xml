@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cz.dao.AuthorityMapper" >
+  <resultMap id="BaseResultMap" type="cz.domain.Authority" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="authority_name" property="authorityName" jdbcType="VARCHAR" />
+    <result column="authority_url" property="authorityUrl" jdbcType="VARCHAR" />
+    <result column="parent" property="parent" jdbcType="INTEGER" />
+    <result column="flag" property="flag" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, authority_name, authority_url, parent, flag
+  </sql>
+  
+  <sql id="Base_Column_Limit">
+    <if test="id != null and id != ''" >
+      id = #{id,jdbcType=INTEGER}
+    </if>
+    <if test="ids != null and ids != ''" >
+      <include refid="Batch_Ids"/>
+    </if>
+    <if test="authorityName != null and authorityName != ''" >
+      authority_name = #{authorityName,jdbcType=VARCHAR}
+    </if>
+    <if test="authorityUrl != null and authorityUrl != ''" >
+      authority_url = #{authorityUrl,jdbcType=VARCHAR}
+    </if>
+    <if test="parent != null and parent != ''" >
+      parent = #{parent,jdbcType=INTEGER}
+    </if>
+    <if test="flag != null and flag != ''" >
+      flag = #{flag,jdbcType=VARCHAR}
+    </if>
+  </sql>
+  
+  <sql id="Batch_Ids">
+    id in
+    <foreach collection="ids" item="item"  open="(" separator="," close=")">#{item}</foreach>
+  </sql>
+
+  <insert id="insertOptional" parameterType="cz.domain.Authority" >
+    insert into authority
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null id != ''" >
+        id,
+      </if>
+      <if test="authorityName != null and authorityName != ''" >
+        authority_name,
+      </if>
+      <if test="authorityUrl != null and authorityUrl != ''" >
+        authority_url,
+      </if>
+      <if test="parent != null and parent != ''" >
+        parent,
+      </if>
+      <if test="flag != null and flag != ''" >
+      flag,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null id != ''" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="authorityName != null and authorityName != ''" >
+        #{authorityName,jdbcType=VARCHAR},
+      </if>
+      <if test="authorityUrl != null and authorityUrl != ''" >
+        #{authorityUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="parent != null and parent != ''" >
+        #{parent,jdbcType=INTEGER},
+      </if>
+      <if test="flag != null and flag != ''" >
+        #{flag,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+
+  <delete id="deleteOptional" parameterType="cz.domain.Authority" >
+    delete from authority
+    <where>
+      <include refid="Base_Column_Limit" />
+    </where>
+  </delete>
+
+  <update id="updateOptional" parameterType="cz.domain.Authority" >
+    update authority
+    <set>
+      <if test="authorityName != null" >
+        authority_name = #{authorityName,jdbcType=VARCHAR},
+      </if>
+      <if test="authorityUrl != null" >
+        authority_url = #{authorityUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="parent != null" >
+        parent = #{parent,jdbcType=INTEGER},
+      </if>
+      <if test="flag != null" >
+        flag = #{flag,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <where>
+      <include refid="Base_Column_Limit" />
+    </where>
+  </update>
+
+  <select id="selectOptional" resultMap="BaseResultMap" parameterType="cz.domain.Authority" >
+    select 
+    <include refid="Base_Column_List" />
+    from authority
+    <where>
+      <include refid="Base_Column_Limit" />
+    </where>
+  </select>
+
+</mapper>

@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xsi:schemaLocation="
+       http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/mvc
+	   http://www.springframework.org/schema/mvc/spring-mvc-4.2.xsd
+       http://www.springframework.org/schema/context
+       http://www.springframework.org/schema/context/spring-context.xsd
+       http://www.springframework.org/schema/tx
+       http://www.springframework.org/schema/tx/spring-tx.xsd
+       http://www.springframework.org/schema/aop
+       http://www.springframework.org/schema/aop/spring-aop.xsd">
+
+    <!--1.配置通配符的扫描器 base-package="cn.kgc.demo.*" "*"为通配符，
+    匹配所有 扫描cn.kgc.demo此包下面的类或者子包及其子包的类 -->
+    <context:component-scan base-package="cz.*">
+        <!--不扫描Controller注解，让springmvc自己去扫描-->
+<!--        <context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller"/>-->
+    </context:component-scan>
+
+    <!--2.配置读取数据库四大件的db.properties-->
+    <!--classpath:表示文件的路径，表示文件在根路径时使用 classpath* ： 表示文件的路径有子路径。 -->
+    <bean id="propertyPlaceholderConfigurer"
+          class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="location" value="classpath:db.properties"/>
+    </bean>
+
+    <!--配置数据源-->
+    <bean id="druidDataSource" class="com.alibaba.druid.pool.DruidDataSource">
+        <!--注入驱动-->
+        <property name="driverClassName" value="${driver}"/>
+        <!--url-->
+        <property name="url" value="${url}"/>
+        <!--用户名-->
+        <property name="username" value="${username}"/>
+        <!--密码-->
+        <property name="password" value="${password}"/>
+
+        <!-- 配置初始化大小、最小、最大 -->
+        <property name="initialSize" value="1" />
+        <property name="minIdle" value="1" />
+        <property name="maxActive" value="20" />
+        <!-- 配置获取连接等待超时的时间 -->
+        <property name="maxWait" value="60000" />
+        <!-- 配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒 -->
+        <property name="timeBetweenEvictionRunsMillis" value="60000" />
+        <!-- 配置一个连接在池中最小生存的时间，单位是毫秒 -->
+        <property name="minEvictableIdleTimeMillis" value="300000" />
+    </bean>
+
+    <!--4.配置SqlSessionFactory的创建且为单例模式，我们使用spring框架去管理-->
+    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <!--注入数据源-->
+        <property name="dataSource" ref="druidDataSource"/>
+        <!--注入mybatis的文件-->
+        <property name="configLocation" value="classpath:mybatis-config.xml"/>
+        <!--注入mybatis的别名配置-->
+        <property name="typeAliasesPackage" value="cz.domain"/>
+        <!--配置扫描到resources/mapper下面的所有mapper.xml文件-->
+        <property name="mapperLocations" value="classpath:mappers/*.xml"/>
+    </bean>
+
+    <!--5.配置得到Mapper动态代理对象（用匿名bean） 通过此工具类将Mapper动态代理对象实例化并放入到IOC容器中进行管理 -->
+    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <!--依赖引入sqlSessionFactory对象-->
+        <property name="sqlSessionFactoryBeanName" value="sqlSessionFactory"/>
+        <!--配置扫描到mapper接口包下面所有的Mapper文件-->
+        <property name="basePackage" value="cz.dao"/>
+    </bean>
+
+    <!--配置事务管理器-->
+    <bean id="tx" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <!--注入数据源-->
+        <property name="dataSource" ref="druidDataSource"/>
+    </bean>
+
+    <tx:advice transaction-manager="tx" id="advice">
+        <tx:attributes>
+            <!--对哪些方法进行事务管理：配置事务的传播行为-->
+            <!--增  删  改  /  查 -->
+            <!--add*:  凡是以add开头的方法，都进行事务管理-->
+            <!--针对业务层的配置-->
+            <tx:method name="add*" propagation="REQUIRED"/>
+            <tx:method name="insert*" propagation="REQUIRED"/>
+            <tx:method name="update*" propagation="REQUIRED"/>
+            <tx:method name="modify*" propagation="REQUIRED"/>
+            <tx:method name="delete*" propagation="REQUIRED"/>
+            <tx:method name="del*" propagation="REQUIRED"/>
+            <tx:method name="remove*" propagation="REQUIRED"/>
+            <tx:method name="get*" propagation="SUPPORTS"/>
+            <tx:method name="select*" propagation="SUPPORTS"/>
+            <tx:method name="find*" propagation="SUPPORTS"/>
+            <tx:method name="*" propagation="SUPPORTS"/>
+        </tx:attributes>
+    </tx:advice>
+    <!--开启声明式事务的注解驱动
+    proxy-target-class="true": 使用spring的动态代理配置 transaction-manager="tx ：引入配置管理器-->
+    <tx:annotation-driven proxy-target-class="true" transaction-manager="tx"/>
+
+    <!--指定业务层：切面=>切入点-->
+    <aop:config proxy-target-class="true">
+        <!--事务管理切面配置-->
+        <aop:advisor advice-ref="advice" pointcut="execution(* cz.service.*.*(..))"></aop:advisor>
+    </aop:config>
+
+    <!--开启springmvc的注解配置
+    <mvc:annotation-driven />-->
+    <mvc:annotation-driven conversion-service="myConversionService">
+        <mvc:message-converters>
+            <!--装配消息转换器-->
+            <bean class="org.springframework.http.converter.StringHttpMessageConverter">
+                <property name="supportedMediaTypes">
+                    <list>
+                        <value>application/json;charset=UTF-8</value>
+                    </list>
+                </property>
+            </bean>
+            <!--装配日期格式转换器-->
+            <bean class="com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter">
+                <property name="supportedMediaTypes">
+                    <list>
+                        <value>text/html;charset=UTF-8</value>
+                        <value>application/json</value>
+                    </list>
+                </property>
+                <property name="features">
+                    <list>
+                        <!--
+                          QuoteFieldNames : 输出key时是否使用双引号,默认为true
+                          WriteMapNullValue : 是否输出值为null的字段,默认为false
+                        -->
+                        <value>WriteMapNullValue</value>
+                        <value>QuoteFieldNames</value>
+                    </list>
+                </property>
+                <property name="dateFormat" value="yyyy/MM/dd HH:mm:ss"/>
+            </bean>
+        </mvc:message-converters>
+    </mvc:annotation-driven>
+    <!--不拦截静态资源-->
+    <mvc:resources mapping="/statics/**" location="/statics/"></mvc:resources>
+
+    <!--装配定义好的转换器-->
+    <bean id="myConversionService" class="org.springframework.context.support.ConversionServiceFactoryBean">
+        <property name="converters">
+            <list>
+                <bean class="cz.config.StringToDateConverter">
+                    <constructor-arg type="java.lang.String" value="yyyy/MM/dd HH:mm:ss"/>
+                </bean>
+            </list>
+        </property>
+    </bean>
+
+    <!-- 配置MultipartResolver，用于上传文件，使用spring的CommonsMultipartResolver -->
+   <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+   <!--最大上传文件大小限制：10Mb 默认单位：b 1024*1024*10 -->
+       <property name="maxUploadSize" value="10485760"/>
+       <!--默认字符编码-->
+       <property name="defaultEncoding" value="UTF-8"/>
+   </bean>
+
+
+    <!--
+        配置映射路径的2种方式：
+        1）xml配置 =》bean的配置 =》HandlerMapping映射 => BeanNameUrlHandlerMapping映射
+            注意：bean的id/name属性必须以/开头
+        2）注解配置 => @RequestMapping("/user");
+    -->
+    <!--自定义控制器
+		通过bean得到自定义的控制器层对象
+        id="/myController"：为此自定义的控制器的名字，也是其访问路径的一部分。
+	-->
+    <!--    <bean id="/show1" class=""/>-->
+
+    <!--通过springMVC默认的控制器进入到某个页面
+        name="/show2":为此默认控制器的名字，同时访问此控制器的路径的一部分。
+    -->
+    <!--    <bean id="/show2" class=""/>-->
+    <!--        &lt;!&ndash;-->
+    <!--            转发到视图层：-->
+    <!--            name="viewName" 表示视图层的名字-->
+    <!--            value="/WEB-INF/jsp/show2.jsp"跳转的jsp的全路径-->
+    <!--        &ndash;&gt;-->
+    <!--        <property name="viewName" value="/WEB-INF/jsp/show2.jsp"/>-->
+
+    <!-- 映射器:可省略掉不用配置 -->
+    <bean class="org.springframework.web.servlet.handler.BeanNameUrlHandlerMapping"></bean>
+    <!-- 适配器:可省略掉不用配置 -->
+    <bean class="org.springframework.web.servlet.mvc.SimpleControllerHandlerAdapter"></bean>
+
+    <!--配置视图解析器-->
+    <bean id="viewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+        <!--配置前缀-->
+        <property name="prefix" value="/WEB-INF/jsp/"/>
+        <!--配置后缀-->
+        <property name="suffix" value=".jsp"/>
+    </bean>
+</beans>

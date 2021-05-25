@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cz.dao.RoomsMapper" >
+  <resultMap id="BaseResultMap" type="cz.domain.Rooms" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="room_pic" property="roomPic" jdbcType="VARCHAR" />
+    <result column="room_num" property="roomNum" jdbcType="VARCHAR" />
+    <result column="room_status" property="roomStatus" jdbcType="VARCHAR" />
+    <result column="room_type_id" property="roomTypeId" jdbcType="INTEGER" />
+    <result column="flag" property="flag" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, room_pic, room_num, room_status, room_type_id, flag
+  </sql>
+
+  <sql id="Base_Column_Limit">
+    <if test="id != null and id != ''" >
+      id,
+    </if>
+    <if test="ids != null and ids != ''" >
+      <include refid="Batch_Ids"/>
+    </if>
+    <if test="roomPic != null and roomPic != ''" >
+      room_pic = #{roomPic,jdbcType=VARCHAR}
+    </if>
+    <if test="roomNum != null and roomNum != ''" >
+      room_num = #{roomNum,jdbcType=VARCHAR}
+    </if>
+    <if test="roomStatus != null and roomStatus != ''" >
+      room_status = #{roomStatus,jdbcType=VARCHAR}
+    </if>
+    <if test="roomTypeId != null and roomTypeId != ''" >
+      room_type_id = #{roomTypeId,jdbcType=INTEGER}
+    </if>
+    <if test="flag != null and flag != ''" >
+      flag = #{flag,jdbcType=INTEGER}
+    </if>
+  </sql>
+
+  <sql id="Batch_Ids">
+    id in
+    <foreach collection="ids" item="item"  open="(" separator="," close=")">#{item}</foreach>
+  </sql>
+
+  <insert id="insertOptional" parameterType="cz.domain.Rooms" >
+    insert into rooms
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null and id != ''" >
+        id,
+      </if>
+      <if test="roomPic != null and roomPic != ''" >
+        room_pic,
+      </if>
+      <if test="roomNum != null and roomNum != ''" >
+        room_num,
+      </if>
+      <if test="roomStatus != null and roomStatus != ''" >
+        room_status,
+      </if>
+      <if test="roomTypeId != null roomTypeId id != ''" >
+        room_type_id,
+      </if>
+      <if test="flag != null and flag != ''" >
+        flag,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null and id != ''" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="roomPic != null and roomPic != ''" >
+        #{roomPic,jdbcType=VARCHAR},
+      </if>
+      <if test="roomNum != null and roomNum != ''" >
+        #{roomNum,jdbcType=VARCHAR},
+      </if>
+      <if test="roomStatus != null and roomStatus != ''" >
+        #{roomStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="roomTypeId != null and roomTypeId != ''" >
+        #{roomTypeId,jdbcType=INTEGER},
+      </if>
+      <if test="flag != null and flag != ''" >
+        #{flag,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+
+  <delete id="deleteOptional" parameterType="java.lang.Integer" >
+    delete from rooms
+    <where>
+      <include refid="Base_Column_Limit" />
+    </where>
+  </delete>
+
+  <update id="updateOptional" parameterType="cz.domain.Rooms" >
+    update rooms
+    <set >
+      <if test="roomPic != null and roomPic != ''" >
+        room_pic = #{roomPic,jdbcType=VARCHAR},
+      </if>
+      <if test="roomNum != null and roomNum != ''" >
+        room_num = #{roomNum,jdbcType=VARCHAR},
+      </if>
+      <if test="roomStatus != null and roomStatus != ''" >
+        room_status = #{roomStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="roomTypeId != null and roomTypeId != ''" >
+        room_type_id = #{roomTypeId,jdbcType=INTEGER},
+      </if>
+      <if test="flag != null and flag != ''" >
+        flag = #{flag,jdbcType=INTEGER},
+      </if>
+    </set>
+    <where>
+      <include refid="Base_Column_Limit" />
+    </where>
+  </update>
+
+  <select id="selectOptional" resultMap="selectMap" parameterType="java.lang.Integer" >
+    select
+    <include refid="Base_Column_List" />
+    from rooms
+    <where>
+      <include refid="Base_Column_Limit" />
+    </where>
+  </select>
+
+  <resultMap id="selectMap" type="Rooms">
+    <association property="roomType" javaType="RoomType" column="room_type_id"
+                 select="cz.dao.RoomTypeMapper.selectOptional"></association>
+  </resultMap>
+</mapper>

@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cz.dao.VipMapper" >
+  <resultMap id="BaseResultMap" type="cz.domain.Vip" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="vip_num" property="vipNum" jdbcType="VARCHAR" />
+    <result column="customer_name" property="customerName" jdbcType="VARCHAR" />
+    <result column="vip_rate" property="vipRate" jdbcType="REAL" />
+    <result column="idcard" property="idcard" jdbcType="VARCHAR" />
+    <result column="phone" property="phone" jdbcType="VARCHAR" />
+    <result column="create_date" property="createDate" jdbcType="TIMESTAMP" />
+    <result column="gender" property="gender" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, vip_num, customer_name, vip_rate, idcard, phone, create_date, gender
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from vip
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from vip
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="cz.domain.Vip" >
+    insert into vip (id, vip_num, customer_name, 
+      vip_rate, idcard, phone, 
+      create_date, gender)
+    values (#{id,jdbcType=INTEGER}, #{vipNum,jdbcType=VARCHAR}, #{customerName,jdbcType=VARCHAR}, 
+      #{vipRate,jdbcType=REAL}, #{idcard,jdbcType=VARCHAR}, #{phone,jdbcType=VARCHAR}, 
+      #{createDate,jdbcType=TIMESTAMP}, #{gender,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="cz.domain.Vip" >
+    insert into vip
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="vipNum != null" >
+        vip_num,
+      </if>
+      <if test="customerName != null" >
+        customer_name,
+      </if>
+      <if test="vipRate != null" >
+        vip_rate,
+      </if>
+      <if test="idcard != null" >
+        idcard,
+      </if>
+      <if test="phone != null" >
+        phone,
+      </if>
+      <if test="createDate != null" >
+        create_date,
+      </if>
+      <if test="gender != null" >
+        gender,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="vipNum != null" >
+        #{vipNum,jdbcType=VARCHAR},
+      </if>
+      <if test="customerName != null" >
+        #{customerName,jdbcType=VARCHAR},
+      </if>
+      <if test="vipRate != null" >
+        #{vipRate,jdbcType=REAL},
+      </if>
+      <if test="idcard != null" >
+        #{idcard,jdbcType=VARCHAR},
+      </if>
+      <if test="phone != null" >
+        #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="createDate != null" >
+        #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="gender != null" >
+        #{gender,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="cz.domain.Vip" >
+    update vip
+    <set >
+      <if test="vipNum != null" >
+        vip_num = #{vipNum,jdbcType=VARCHAR},
+      </if>
+      <if test="customerName != null" >
+        customer_name = #{customerName,jdbcType=VARCHAR},
+      </if>
+      <if test="vipRate != null" >
+        vip_rate = #{vipRate,jdbcType=REAL},
+      </if>
+      <if test="idcard != null" >
+        idcard = #{idcard,jdbcType=VARCHAR},
+      </if>
+      <if test="phone != null" >
+        phone = #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="createDate != null" >
+        create_date = #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="gender != null" >
+        gender = #{gender,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="cz.domain.Vip" >
+    update vip
+    set vip_num = #{vipNum,jdbcType=VARCHAR},
+      customer_name = #{customerName,jdbcType=VARCHAR},
+      vip_rate = #{vipRate,jdbcType=REAL},
+      idcard = #{idcard,jdbcType=VARCHAR},
+      phone = #{phone,jdbcType=VARCHAR},
+      create_date = #{createDate,jdbcType=TIMESTAMP},
+      gender = #{gender,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

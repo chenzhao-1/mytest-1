@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE generatorConfiguration
+        PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
+        "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+<generatorConfiguration>
+    <!--启动命令：mybatis-generator:generate -e-->
+
+    <!--获取配置文件-->
+    <properties resource="db.properties" />
+    <!--获取逆向工程依赖路径-->
+    <classPathEntry location="${driverLocation}"/>
+
+    <context id="context1" targetRuntime="mybatis3">
+        <commentGenerator>
+            <!-- 是否去除自动生成的注释 true：是 ： false:否 -->
+            <property name="suppressAllComments" value="true"/>
+            <!-- 是否去除所有自动生成的文件的时间戳，默认为false -->
+            <property name="suppressDate" value="true"/>
+        </commentGenerator>
+
+        <!--数据库连接的信息：驱动类、连接地址、用户名、密码 -->
+        <jdbcConnection driverClass="${driver}"
+                        connectionURL="${url}"
+                        userId="${username}"
+                        password="${password}"
+        >
+            <!--解决逆向工程生成sql语句重复生成 -->
+            <property name="nullCatalogMeansCurrent" value="true"/>
+        </jdbcConnection>
+
+        <!-- targetPackage:包名称(自定义) targetProject：项目路径(自定义) -->
+        <!--定义model的包名称:domain实体类-->
+        <javaModelGenerator targetPackage="cz.domain" targetProject="src/main/java">
+            <!-- enableSubPackages:是否让schema作为包的后缀 -->
+            <property name="enableSubPackage" value="false"/>
+            <!-- 从数据库返回的值被清理前后的空格 -->
+            <property name="trimStrings" value="false"/>
+        </javaModelGenerator>
+
+        <!-- 配置生成相应的实体Mapper.xml，对于Mapper3.X我们需要把type="XMLMAPPER" -->
+        <!-- targetPackage:包名称(自定义) targetProject：项目路径(自定义) -->
+        <sqlMapGenerator targetPackage="mappers" targetProject="src/main/resources">
+            <property name="enableSubPackage" value="false"/>
+        </sqlMapGenerator>
+
+        <!-- 配置生成相应的接口类，对应与Mapper.xml中的一系列CRUD方法SQL语句 -->
+        <!-- targetPackage:包名称(自定义) targetProject：项目路径(自定义) -->
+        <javaClientGenerator type="XMLMAPPER" targetPackage="cz.dao" targetProject="src/main/java">
+            <property name="enableSubPackage" value="false"/>
+        </javaClientGenerator>
+
+        <!-- tableName="表名" domainObjectName="实体类名" -->
+        <table tableName="authority" domainObjectName="Authority"
+               selectByExampleQueryId="false"
+               enableDeleteByExample="false"
+               enableUpdateByExample="false"
+               enableCountByExample="false"
+               enableSelectByExample="false"
+        ></table>
+        <table tableName="in_room_info" domainObjectName="InRoomInfo"
+               selectByExampleQueryId="false"
+               enableDeleteByExample="false"
+               enableUpdateByExample="false"
+               enableCountByExample="false"
+               enableSelectByExample="false"
+        ></table>
+        <table tableName="orders" domainObjectName="Orders"
+               selectByExampleQueryId="false"
+               enableDeleteByExample="false"
+               enableUpdateByExample="false"
+               enableCountByExample="false"
+               enableSelectByExample="false"
+        ></table>
+        <table tableName="role_auth" domainObjectName="RoleAuth"
+               selectByExampleQueryId="false"
+               enableDeleteByExample="false"
+               enableUpdateByExample="false"
+               enableCountByExample="false"
+               enableSelectByExample="false"
+        ></table>
+        <table tableName="roles" domainObjectName="Roles"
+               selectByExampleQueryId="false"
+               enableDeleteByExample="false"
+               enableUpdateByExample="false"
+               enableCountByExample="false"
+               enableSelectByExample="false"
+        ></table>
+        <table tableName="room_type" domainObjectName="RoomType"
+               selectByExampleQueryId="false"
+               enableDeleteByExample="false"
+               enableUpdateByExample="false"
+               enableCountByExample="false"
+               enableSelectByExample="false"
+        ></table>
+        <table tableName="rooms" domainObjectName="Rooms"
+               selectByExampleQueryId="false"
+               enableDeleteByExample="false"
+               enableUpdateByExample="false"
+               enableCountByExample="false"
+               enableSelectByExample="false"
+        ></table>
+        <table tableName="roomsale" domainObjectName="RoomSale"
+               selectByExampleQueryId="false"
+               enableDeleteByExample="false"
+               enableUpdateByExample="false"
+               enableCountByExample="false"
+               enableSelectByExample="false"
+        ></table>
+        <table tableName="user" domainObjectName="User"
+               selectByExampleQueryId="false"
+               enableDeleteByExample="false"
+               enableUpdateByExample="false"
+               enableCountByExample="false"
+               enableSelectByExample="false"
+        ></table>
+        <table tableName="vip" domainObjectName="Vip"
+               selectByExampleQueryId="false"
+               enableDeleteByExample="false"
+               enableUpdateByExample="false"
+               enableCountByExample="false"
+               enableSelectByExample="false"
+        ></table>
+    </context>
+</generatorConfiguration>

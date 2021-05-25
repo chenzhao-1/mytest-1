@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cz.dao.OrdersMapper" >
+  <resultMap id="BaseResultMap" type="cz.domain.Orders" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="order_num" property="orderNum" jdbcType="VARCHAR" />
+    <result column="order_money" property="orderMoney" jdbcType="DOUBLE" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="order_status" property="orderStatus" jdbcType="VARCHAR" />
+    <result column="iri_id" property="iriId" jdbcType="INTEGER" />
+    <result column="create_date" property="createDate" jdbcType="TIMESTAMP" />
+    <result column="flag" property="flag" jdbcType="VARCHAR" />
+    <result column="order_other" property="orderOther" jdbcType="VARCHAR" />
+    <result column="order_price" property="orderPrice" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, order_num, order_money, remark, order_status, iri_id, create_date, flag, order_other, 
+    order_price
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from orders
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from orders
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="cz.domain.Orders" >
+    insert into orders (id, order_num, order_money, 
+      remark, order_status, iri_id, 
+      create_date, flag, order_other, 
+      order_price)
+    values (#{id,jdbcType=INTEGER}, #{orderNum,jdbcType=VARCHAR}, #{orderMoney,jdbcType=DOUBLE}, 
+      #{remark,jdbcType=VARCHAR}, #{orderStatus,jdbcType=VARCHAR}, #{iriId,jdbcType=INTEGER}, 
+      #{createDate,jdbcType=TIMESTAMP}, #{flag,jdbcType=VARCHAR}, #{orderOther,jdbcType=VARCHAR}, 
+      #{orderPrice,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="cz.domain.Orders" >
+    insert into orders
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="orderNum != null" >
+        order_num,
+      </if>
+      <if test="orderMoney != null" >
+        order_money,
+      </if>
+      <if test="remark != null" >
+        remark,
+      </if>
+      <if test="orderStatus != null" >
+        order_status,
+      </if>
+      <if test="iriId != null" >
+        iri_id,
+      </if>
+      <if test="createDate != null" >
+        create_date,
+      </if>
+      <if test="flag != null" >
+        flag,
+      </if>
+      <if test="orderOther != null" >
+        order_other,
+      </if>
+      <if test="orderPrice != null" >
+        order_price,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="orderNum != null" >
+        #{orderNum,jdbcType=VARCHAR},
+      </if>
+      <if test="orderMoney != null" >
+        #{orderMoney,jdbcType=DOUBLE},
+      </if>
+      <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="orderStatus != null" >
+        #{orderStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="iriId != null" >
+        #{iriId,jdbcType=INTEGER},
+      </if>
+      <if test="createDate != null" >
+        #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="flag != null" >
+        #{flag,jdbcType=VARCHAR},
+      </if>
+      <if test="orderOther != null" >
+        #{orderOther,jdbcType=VARCHAR},
+      </if>
+      <if test="orderPrice != null" >
+        #{orderPrice,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="cz.domain.Orders" >
+    update orders
+    <set >
+      <if test="orderNum != null" >
+        order_num = #{orderNum,jdbcType=VARCHAR},
+      </if>
+      <if test="orderMoney != null" >
+        order_money = #{orderMoney,jdbcType=DOUBLE},
+      </if>
+      <if test="remark != null" >
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="orderStatus != null" >
+        order_status = #{orderStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="iriId != null" >
+        iri_id = #{iriId,jdbcType=INTEGER},
+      </if>
+      <if test="createDate != null" >
+        create_date = #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="flag != null" >
+        flag = #{flag,jdbcType=VARCHAR},
+      </if>
+      <if test="orderOther != null" >
+        order_other = #{orderOther,jdbcType=VARCHAR},
+      </if>
+      <if test="orderPrice != null" >
+        order_price = #{orderPrice,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="cz.domain.Orders" >
+    update orders
+    set order_num = #{orderNum,jdbcType=VARCHAR},
+      order_money = #{orderMoney,jdbcType=DOUBLE},
+      remark = #{remark,jdbcType=VARCHAR},
+      order_status = #{orderStatus,jdbcType=VARCHAR},
+      iri_id = #{iriId,jdbcType=INTEGER},
+      create_date = #{createDate,jdbcType=TIMESTAMP},
+      flag = #{flag,jdbcType=VARCHAR},
+      order_other = #{orderOther,jdbcType=VARCHAR},
+      order_price = #{orderPrice,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>
